@@ -28,7 +28,8 @@ public class DataSource {
       preparedStatement.setString(1, username);
       try (ResultSet resultSet = preparedStatement.executeQuery()) {
         customer = new Customer(resultSet.getInt("id"),
-            resultSet.getString("name"), resultSet.getString("username"),
+            resultSet.getString("name"), 
+            resultSet.getString("username"),
             resultSet.getString("password"),
             resultSet.getInt("account_id"));
       }
