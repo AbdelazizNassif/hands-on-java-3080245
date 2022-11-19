@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 import javax.security.auth.login.LoginException;
 
+import bank.exceptions.AmountException;
+
 public class Menu {
   private Scanner scanner;
 
@@ -51,11 +53,33 @@ public class Menu {
       System.out.println("3: Check Balance");
       System.out.println("4: Exit");
     System.out.println("*************************");
-
+      double amount = 0;
       selection = scanner.nextInt();
       switch (selection) {
-        
-
+        case 1:
+          amount = scanner.nextDouble();
+          try {
+            account.deposit(amount);
+          } catch (AmountException e) {
+            // TODO Auto-generated catch block
+            System.out.println(e.getMessage());
+            System.out.println("Try again");
+          }
+          break;
+        case 2:
+          amount = scanner.nextDouble();
+          account.withdraw(amount);
+          break;
+        case 3:
+          System.out.println("Your current balance is: " + account.getBalance() );
+          break;
+        case 4:
+          Authenticator.logout(customer);
+          System.out.println("Thanks for banking with us");
+          break;
+        default:
+          System.out.println("Invalid input");
+          break;
       }
     }
 

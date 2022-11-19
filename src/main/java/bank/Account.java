@@ -1,5 +1,9 @@
 package bank;
 
+import java.nio.file.AtomicMoveNotSupportedException;
+
+import bank.exceptions.AmountException;
+
 public class Account {
   private int id;
   private String type;
@@ -10,7 +14,6 @@ public class Account {
     setType(type);
     setBalance(balance);
   }
-  
 
   public int getId() {
     return this.id;
@@ -36,5 +39,18 @@ public class Account {
     this.balance = balance;
   }
 
+  public void deposit(double amount) throws AmountException {
+    if (amount < 1)
+    {
+      throw new AmountException("The minimum amount is 1");
+    }
+    else{
+      double newBalance = this.balance + amount ;
+      setBalance(newBalance);
+    }
+  }
 
+  public void withdraw(double amount) {
+    this.balance -= amount;
+  }
 }
