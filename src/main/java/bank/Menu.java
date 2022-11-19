@@ -19,7 +19,6 @@ public class Menu {
       Account account = DataSource.getAccount(customer.getAccountId());
       menu.showMenu(customer, account);
     }
-
     menu.scanner.close();
   }
 
@@ -68,7 +67,13 @@ public class Menu {
           break;
         case 2:
           amount = scanner.nextDouble();
-          account.withdraw(amount);
+          try {
+            account.withdraw(amount);
+          } catch (AmountException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            System.out.println("Try again");
+          }
           break;
         case 3:
           System.out.println("Your current balance is: " + account.getBalance() );

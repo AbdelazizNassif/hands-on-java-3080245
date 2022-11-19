@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.concurrent.atomic.DoubleAdder;
 
 public class DataSource {
   public static Connection connect() {
@@ -28,7 +29,7 @@ public class DataSource {
       preparedStatement.setString(1, username);
       try (ResultSet resultSet = preparedStatement.executeQuery()) {
         customer = new Customer(resultSet.getInt("id"),
-            resultSet.getString("name"), 
+            resultSet.getString("name"),
             resultSet.getString("username"),
             resultSet.getString("password"),
             resultSet.getInt("account_id"));
@@ -55,12 +56,20 @@ public class DataSource {
     }
     return account;
   }
-  public static void main(String[] args) {
-    Customer customer = getCustomer("twest8o@friendfeed.com");
-    System.out.println(customer.getAccountId());
-    System.out.println(customer.getId());
-    Account account = getAccount(90431);
-    System.out.println(account.getBalance());
 
+  public static void updateAccountBalance(int accountId, double balance) {
+    String sqlQueryToGetAccount = "update accounts set balance = ? where id = ?";
+    try (
+      Connection connection = connect();
+      PreparedStatement preparedStatement = connection.prepareStatement(sqlQueryToGetAccount);
+    ){
+      preparedStatement.setDouble(1, balance);
+      preparedStatement.setInt(2, accountId);
+      preparedStatement.executeUpdate();
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
+    }
+    
   }
 }
